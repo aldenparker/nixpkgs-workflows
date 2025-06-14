@@ -50,14 +50,12 @@ jobs:
 
           if [ "$CURR_VERSION" = "$NEW_VERSION" ]; then
             echo "Versions are the same, no update needed."
-            gh run cancel ${{ github.run_id }}
-            gh run watch ${{ github.run_id }}
+            exit 1
           fi
 
           if gh pr list --repo "NixOS/nixpkgs" --search "${{ matrix.package }}: $CURR_VERSION -> $NEW_VERSION" | grep -q "${{ matrix.package }}: $CURR_VERSION -> $NEW_VERSION"; then
             echo "A pull request for this update already exists."
-            gh run cancel ${{ github.run_id }}
-            gh run watch ${{ github.run_id }}
+            exit 1
           fi
 
       - name: create commit
