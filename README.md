@@ -13,15 +13,18 @@ That's it! Below are how to get some of the more advanced features working:
 **Auto Post / Approve Nixpkgs PR**: You need to generate a [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens):
     1. Go to <https://github.com/settings/tokens> and generate a new **classic** token with the `public_repo` scope.
     2. In your fork, go to "Settings" > "Secrets and variables" > "actions" and [add a new repository secret](../../settings/secrets/actions/new) with the name `GH_TOKEN` and set its value to the personal access token you generated before.
+    
 **Cache Build (Attic)**: Replace `$CACHE` with the name of your cache (e.g. `nixpkgs`) and `$SERVER` with the url of your Attic server (e.g. `https://attic.example.com/`):
     1. Generate a token with `push` and `pull` permissions: `atticadm make-token --sub nixpkgs-review-gha --validity 1y --pull $CACHE --push $CACHE`
     2. [Create a new variable](../../settings/variables/actions/new) with the name `ATTIC_SERVER` and set it to the value of `$SERVER`
     3. [Create a new variable](../../settings/variables/actions/new) with the name `ATTIC_CACHE` and set it to the value of `$CACHE`
     4. [Create a new secret](../../settings/secrets/actions/new) with the name `ATTIC_TOKEN` and set its value to the token you generated before.
+    
 **Cache Build (Cachix)**: Note: If both an Attic cache and a Cachix cache is configured, the Attic cache is preferred and the Cachix configuration is ignored.
     1. Go to https://app.cachix.org/ and set up your binary cache.
     2. [Create a new variable](../../settings/variables/actions/new) with the name `CACHIX_CACHE` and set it to the name of your Cachix cache.
     3. [Create a new secret](../../settings/secrets/actions/new) with the name `CACHIX_AUTH_TOKEN` and set its value to your auth token. If you are using a self-signed cache, you also need to create a `CACHIX_SIGNING_KEY` secret and set its value to your private signing key.
+    
 **Review and PR Track Button in Nixpkg PRs**: Add [`review-button.js`](review-button.js) as a user script in your browser using [Tampermonkey](https://www.tampermonkey.net/). Be sure to change the `const repo = "aldenparker/nixpkgs-workflows";` part to reflect the url of your fork.
 
 ### Usage
