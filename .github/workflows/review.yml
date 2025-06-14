@@ -103,9 +103,9 @@ jobs:
               uses: wimpysworld/nothing-but-nix@v6
 
             - name: install nix
-              uses: cachix/install-nix-action@v31.4.0
+              uses: DeterminateSystems/nix-installer-action@v17
               with:
-                  extra_nix_config: |
+                  extra-conf: |
                       sandbox = ${{
                         (matrix.system == 'x86_64-darwin' && inputs.x86_64-darwin == 'yes_sandbox_false'
                           || matrix.system == 'aarch64-darwin' && inputs.aarch64-darwin == 'yes_sandbox_false') && 'false'
