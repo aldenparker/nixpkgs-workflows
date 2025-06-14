@@ -99,12 +99,13 @@ jobs:
             fetch_cmd_aarch64-darwin: ${{ steps.report.outputs.fetch_cmd_aarch64-darwin }}
 
         steps:
-            - uses: wimpysworld/nothing-but-nix@v6
+            - name: prepare runner for nix
+              uses: wimpysworld/nothing-but-nix@v6
               with:
                   nix-permission-edict: true
 
             - name: install nix
-              uses: cachix/install-nix-action@v31
+              uses: cachix/install-nix-action@v31.4.0
               with:
                   extra_nix_config: |
                       sandbox = ${{
