@@ -11,12 +11,11 @@ jobs:
       matrix:
         package: # Update these to all the current packages that I am a maintainer of or use often.
           - zed-editor
-    name: "check ${{ matrix.package }}"
+    name: "${{ matrix.package }}"
     runs-on: ubuntu-latest
     steps:
-      - name: prepare runner for nix (linux only)
+      - name: prepare runner for nix
         uses: wimpysworld/nothing-but-nix@v6
-        if: ${{ matrix.system == 'x86_64-linux' || matrix.system == 'aarch64-linux' }}
 
       - name: install nix
         uses: DeterminateSystems/nix-installer-action@v17
@@ -51,18 +50,22 @@ jobs:
 
           if [ "$CURR_VERSION" = "$NEW_VERSION" ]; then
             echo "Versions are the same, no update needed."
-            exit 0
+            gh run cancel ${{ github.run_id }}
+            gh run watch ${{ github.run_id }}
           fi
 
           if gh pr list --repo "NixOS/nixpkgs" --search "${{ matrix.package }}: $CURR_VERSION -> $NEW_VERSION" | grep -q "${{ matrix.package }}: $CURR_VERSION -> $NEW_VERSION"; then
             echo "A pull request for this update already exists."
-            exit 0
+            gh run cancel ${{ github.run_id }}
+            gh run watch ${{ github.run_id }}
           fi
 
       - name: create commit
         env:
           GH_TOKEN: "${{ secrets.GH_TOKEN }}"
         run: |
+          git config --global user.email "upkeep@bot.com"
+          git config --global user.name "upkeep-bot"
           git add .
           git commit -m "${{ matrix.package }}: $CURR_VERSION -> $NEW_VERSION"
           git push origin update-${{ matrix.package }}
