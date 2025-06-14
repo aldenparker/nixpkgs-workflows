@@ -101,8 +101,6 @@ jobs:
         steps:
             - name: prepare runner for nix
               uses: wimpysworld/nothing-but-nix@v6
-              with:
-                  nix-permission-edict: true
 
             - name: install nix
               uses: cachix/install-nix-action@v31.4.0
