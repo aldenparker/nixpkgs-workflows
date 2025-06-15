@@ -226,7 +226,7 @@ jobs:
               id: report
               run: |
                   echo -e "## \`nixpkgs-review\` result\n" >> report.md
-                  echo -e "Generated using [\`nixpkgs-review-gha\`](https://github.com/Defelo/nixpkgs-review-gha)\n" >> report.md
+                  echo -e "Generated using [\`review.yml\`](https://github.com/${{ github.repository }}/blob/main/.github/workflows/review.yml)\n" >> report.md
                   echo -e "Command: \`nixpkgs-review pr ${PR_NUMBER}\`\n" >> report.md
                   echo -e "Logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n" >> report.md
 
