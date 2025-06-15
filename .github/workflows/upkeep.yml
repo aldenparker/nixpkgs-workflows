@@ -55,7 +55,7 @@ jobs:
 
           if gh pr list --repo "NixOS/nixpkgs" --search "${{ matrix.package }}: $CURR_VERSION -> $NEW_VERSION" | grep -q "${{ matrix.package }}: $CURR_VERSION -> $NEW_VERSION"; then
             echo "A pull request for this update already exists."
-            exit 1
+            exit 0
           fi
 
       - name: create commit
