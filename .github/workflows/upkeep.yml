@@ -38,7 +38,7 @@ jobs:
         env:
           GH_TOKEN: "${{ secrets.GH_TOKEN }}"
         run: |
-          git checkout -b update-${{ matrix.package }}
+          git checkout -b update-${{ matrix.package }}-${{ github.run_id }}
           
           CURR_VERSION="$(nix eval --raw --file . ${{ matrix.package }}.version)"
           echo "Current version: $CURR_VERSION"
@@ -66,7 +66,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git add .
           git commit -m "${{ matrix.package }}: $CURR_VERSION -> $NEW_VERSION"
-          git push origin update-${{ matrix.package }}
+          git push origin update-${{ matrix.package }}-${{ github.run_id }}
         
       - name: generate report and post pr
         # TODO: ADD AFTER TESTS gh pr create --base main --head aldenparker:update-${{ matrix.package }} --title "${{ matrix.package }}: $CURR_VERSION -> $NEW_VERSION" -F report.md
