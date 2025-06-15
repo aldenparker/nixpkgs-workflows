@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         package: # Update these to all the current packages that I am a maintainer of or use often.
-          - zed-editor
+          - xnconvert
     name: "${{ matrix.package }}"
     runs-on: ubuntu-latest
     steps:
@@ -22,11 +22,6 @@ jobs:
         with:
             extra-conf: |
                 sandbox = true
-                
-      - name: run nix-info
-        id: nix-info
-        run: |
-          echo NIX_INFO=$(nix-shell -p nix-info --run 'nix-info -m') >> $GITHUB_ENV
 
       - name: clone my nixpkgs
         uses: "actions/checkout@v4"
@@ -55,7 +50,7 @@ jobs:
 
           if gh pr list --repo "NixOS/nixpkgs" --search "${{ matrix.package }}: $CURR_VERSION -> $NEW_VERSION" | grep -q "${{ matrix.package }}: $CURR_VERSION -> $NEW_VERSION"; then
             echo "A pull request for this update already exists."
-            exit 0
+            exit 1
           fi
 
       - name: create commit
@@ -69,7 +64,6 @@ jobs:
           git push origin update-${{ matrix.package }}-${{ github.run_id }}
         
       - name: generate report and post pr
-        # TODO: ADD AFTER TESTS gh pr create --base main --head aldenparker:update-${{ matrix.package }} --title "${{ matrix.package }}: $CURR_VERSION -> $NEW_VERSION" -F report.md
         env:
           GH_TOKEN: "${{ secrets.GH_TOKEN }}"
         run: |
@@ -77,9 +71,7 @@ jobs:
           Generated using [\`upkeep.yml\`](https://github.com/${{ github.repository }}/blob/main/.github/workflows/upkeep.yml)
           Command: \`nix-shell maintainers/scripts/update.nix --argstr package \"${{ matrix.package }}\" --argstr skip-prompt true\`
           Logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          nix-info:
-          $NIX_INFO
-
+  
           ### NOTE: A nixpkgs-review will be run and posted to this pull request as soon as possible to make sure everything is building correctly.
 
           ## Things done
@@ -114,5 +106,7 @@ jobs:
           [pull requests you find important]: https://github.com/NixOS/nixpkgs/pulls?q=is%3Aopen+sort%3Areactions-%2B1-desc" > report.md
 
           cat report.md >> $GITHUB_STEP_SUMMARY
+
+          gh pr create --base main --head aldenparker:update-${{ matrix.package }}-${{ github.run_id }} --title "${{ matrix.package }}: $CURR_VERSION -> $NEW_VERSION" -F report.md
 
           
