@@ -32,7 +32,6 @@ jobs:
         uses: "actions/checkout@v4"
         with:
           repository: aldenparker/nixpkgs
-          persist-credentials: false
           token: ${{ secrets.GH_TOKEN }}
           
       - name: check for update and if pr already exists
