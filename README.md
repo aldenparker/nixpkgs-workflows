@@ -48,3 +48,6 @@ Builds specific package from registered flakes. Remember that the package is not
 2. Click on "Run workflow".
 3. Enter the packages you want to build and click on "Run workflow".
 4. Reload the page if necessary and click on the review run to see the logs.
+
+## upkeep.yml
+Checks specific packages for updates each day and makes a pull request if one needs updating. This is mainly to keep my packages as up to date as possible, but you could add your own packages when you fork.
