@@ -62,8 +62,8 @@ jobs:
         env:
           GH_TOKEN: "${{ secrets.GH_TOKEN }}"
         run: |
-          git config --global user.email "upkeep@bot.com"
-          git config --global user.name "upkeep-bot"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
           git add .
           git commit -m "${{ matrix.package }}: $CURR_VERSION -> $NEW_VERSION"
           git push origin update-${{ matrix.package }}
